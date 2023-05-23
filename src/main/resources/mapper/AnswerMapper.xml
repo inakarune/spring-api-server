@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AnswerMapper">
+    <select id="getList" resultType="com.example.domain.AnswerVO">
+        <![CDATA[
+        select * from tbl_answer where ano > 0 order by regdate desc
+        ]]>
+    </select>
+
+    <insert id="insert">
+        insert into tbl_board (ano, content, writer)
+        values (seq_board.nextval, #{content}, #{writer})
+    </insert>
+
+    <insert id="insertSelectKey">
+        <selectKey keyProperty="ano" order="BEFORE" resultType="long">
+            select seq_board.nextval from dual
+        </selectKey>
+
+        insert into tbl_answer (ano, content, writer)
+        values (#{ano}, #{content}, #{writer})
+    </insert>
+
+    <select id="read" resultType="com.example.domain.AnswerVO">
+        select * from tbl_answer where ano = #{ano}
+    </select>
+
+    <delete id="delete">
+        delete from tbl_answer where ano = #{ano}
+    </delete>
+
+    <update id="update">
+        update tbl_answer
+        set
+            content=#{content},
+            writer=#{writer},
+            updateDate = sysdate
+        where ano = #{ano}
+    </update>
+</mapper>
